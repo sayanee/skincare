@@ -1,9 +1,10 @@
 var osmosis = require('osmosis')
-var ingredientList = 'Galactomyces Ferment Filtrate, Aqua (Water), Butylene Glycol, Pentylene Glycol, Glycerin, 1,2-Hexanediol, Bifida Ferment Lysate, Ceramide NP, Althaea Rosea Root Extract, Aloe Barbadensis Leaf Extract, Betaine, Panthenol, Allantoin, Sodium Hyaluronate, sh-Oligopeptide-1, Zanthoxylum, Piperitum Fruit Extract, Pulsatilla Koreana Extract Usnea Barbata (Lichen) Extract, Adenosine, Arginine, Xanthan Gum, Hydrogenated Lecithin, Polysorbate 20, Lecithin'
+var ingredientList = process.argv[2]
 var ingredientListArray = ingredientList.split(', ')
 var ingredientListNotFound = []
 var ingredientListHarmful = []
 var count = 0
+
 
 ingredientListArray.forEach(function(ingredient) {
   osmosis
@@ -36,6 +37,7 @@ ingredientListArray.forEach(function(ingredient) {
     count++;
     if (count == ingredientListArray.length ) {
       console.log("---------------------------")
+      console.log('Total score: ' + Math.floor(((ingredientListArray.length - ingredientListNotFound.length - ingredientListHarmful.length) / ingredientListArray.length) * 100) + '%')
       console.log('Total number of ingredients: ' + ingredientListArray.length)
       console.log('Total number of ingredients harmful: ' + ingredientListHarmful.length)
       console.log('Total number of ingredients not found in EWG DB: ' + ingredientListNotFound.length)
