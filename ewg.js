@@ -1,10 +1,28 @@
+const program = require('commander')
 var osmosis = require('osmosis')
-var ingredientList = process.argv[2]
+
+program
+  .option('-n, --name <type>', 'Real Ferment Micro Essence')
+  .option('-b, --brand <type>', 'Neogen')
+  .option('-c, --category <type>', 'essence')
+  .option('-i, --ingredients <type>', 'Water, Propanediol, Glycerin, Betaine, Panthenol');
+program.parse(process.argv)
+
+var ingredientList = sanitize(program.ingredients)
 var ingredientListArray = ingredientList.split(', ')
 var ingredientListNotFound = []
 var ingredientListHarmful = []
 var count = 0
 
+// TODO:
+// Append data to a CSV file
+// Columns: Name, Brand, Category, Total number of ingredients, Total number of harmful ingredients, Harmless score, Harmful ingredient list with EWG score, Full ingredient list
+
+console.log("\n\n---------------------------")
+console.log("Name: " + program.name)
+console.log("Brand: " + program.brand)
+console.log("Category: " + program.category)
+console.log("Ingredients: " + ingredientList)
 
 ingredientListArray.forEach(function(ingredient) {
   osmosis
@@ -22,6 +40,8 @@ ingredientListArray.forEach(function(ingredient) {
 
     if (listing.ingredient) {
       var ingredientName = listing.ingredient.substring(0, listing.ingredient.indexOf('('))
+      ingredientName = ingredientName.replace(/INGREDIENT:/g, '').trim()
+
       var paragraph = listing.score
       var regex = /image\d/g
       var found = paragraph.match(regex)
@@ -29,7 +49,8 @@ ingredientListArray.forEach(function(ingredient) {
       score = parseInt(score, 10)
 
       if (score > 2) {
-        console.log('For ' + ingredient + ', ' + ingredientName + ' score is ' + score + ' ❌')
+        // console.log(ingredient + ': ' + ingredientName + '(' + score + ') ❌')
+        console.log(ingredient + ' (' + score + ')')
         ingredientListHarmful.push(listing.ingredient)
       }
     }
@@ -50,3 +71,7 @@ ingredientListArray.forEach(function(ingredient) {
     setTimeout(function() { }, 1000)
   })
 })
+
+function sanitize(input) {
+  return input.toLowerCase().replace(/ceramide\snp/g, 'ceramide ').replace(/galactomyces/g, 'saccharomyces').replace(/leaf/g, '').replace(/extract/g, '').replace(/oil/g, '').replace(/fruit/g, '').replace(/root/g, '').replace(/extract/g, '').replace(/water/g, '').replace(/ferment/g, '').replace(/filtrate/g, '').replace(/juice/g, '').replace(/seed/g, '').replace(/\([a-zA-Z]+\)/g, '').replace(/\(\)/g, '').replace(/\s\s*/g, ' ').replace(/\s,\s/g, ', ').replace(/,,\s/g, ', ')
+}
