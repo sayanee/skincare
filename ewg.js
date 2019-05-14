@@ -77,9 +77,11 @@ ingredientListArray.forEach(function(ingredient) {
 function sanitize(input) {
   return input.toLowerCase()
 
+    // Replace ingredient names
     .replace(/ceramide\snp/g, 'ceramide ')
     .replace(/galactomyces/g, 'saccharomyces')
 
+    // Remove generic types of ingredients
     .replace(/leaf/g, '')
     .replace(/extract/g, '')
     .replace(/oil/g, '')
@@ -88,16 +90,21 @@ function sanitize(input) {
     .replace(/root/g, '')
     .replace(/extract/g, '')
     .replace(/water/g, '')
+    .replace(/aqua/g, '')
     .replace(/ferment/g, '')
     .replace(/filtrate/g, '')
     .replace(/juice/g, '')
     .replace(/seed/g, '')
+    .replace(/stem/g, '')
 
-    .replace(/\([a-zA-Z\s]+\)/g, '')
-    .replace(/\(\)/g, '')
-    .replace(/\//g, '')
-    .replace(/\./g, '')
-    .replace(/\s\s*/g, ' ')
-    .replace(/\s,\s/g, ', ')
-    .replace(/,,\s/g, ', ')
+    // Deal with spaces, brakcets and commas
+    .replace(/[w]*,[w]*/g, ', ')   // replace  "word,word" with "word, word"
+    .replace(/\([a-zA-Z\s]+\)/g, '') // remove all bracketted words
+    .replace(/\(\)/g, '')      // remove all brackets
+    .replace(/\//g, '')       // remove all forward slashes
+    .replace(/\./g, '')       // remove all full stops
+    .replace(/\s\s*/g, ' ')   // remove double spaces
+    .replace(/\s,\s/g, ', ')  // replace " , " with ", "
+    .replace(/\s,/g, ', ')    // replace " ," with ", "
+    .replace(/,,\s/g, ', ')   // replace  ",," with ", "
 }
