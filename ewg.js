@@ -9,7 +9,9 @@ program
 program.parse(process.argv)
 
 var ingredientList = sanitize(program.ingredients)
-var ingredientListArray = ingredientList.split(', ')
+var ingredientListArray = ingredientList
+  .split(', ')
+  .filter(Boolean)
 var ingredientListNotFound = []
 var ingredientListHarmful = []
 var count = 0
@@ -73,5 +75,29 @@ ingredientListArray.forEach(function(ingredient) {
 })
 
 function sanitize(input) {
-  return input.toLowerCase().replace(/ceramide\snp/g, 'ceramide ').replace(/galactomyces/g, 'saccharomyces').replace(/leaf/g, '').replace(/extract/g, '').replace(/oil/g, '').replace(/fruit/g, '').replace(/root/g, '').replace(/extract/g, '').replace(/water/g, '').replace(/ferment/g, '').replace(/filtrate/g, '').replace(/juice/g, '').replace(/seed/g, '').replace(/\([a-zA-Z]+\)/g, '').replace(/\(\)/g, '').replace(/\s\s*/g, ' ').replace(/\s,\s/g, ', ').replace(/,,\s/g, ', ')
+  return input.toLowerCase()
+
+    .replace(/ceramide\snp/g, 'ceramide ')
+    .replace(/galactomyces/g, 'saccharomyces')
+
+    .replace(/leaf/g, '')
+    .replace(/extract/g, '')
+    .replace(/oil/g, '')
+    .replace(/fruit/g, '')
+    .replace(/flower/g, '')
+    .replace(/root/g, '')
+    .replace(/extract/g, '')
+    .replace(/water/g, '')
+    .replace(/ferment/g, '')
+    .replace(/filtrate/g, '')
+    .replace(/juice/g, '')
+    .replace(/seed/g, '')
+
+    .replace(/\([a-zA-Z\s]+\)/g, '')
+    .replace(/\(\)/g, '')
+    .replace(/\//g, '')
+    .replace(/\./g, '')
+    .replace(/\s\s*/g, ' ')
+    .replace(/\s,\s/g, ', ')
+    .replace(/,,\s/g, ', ')
 }
