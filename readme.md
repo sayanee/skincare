@@ -1,6 +1,6 @@
 # skincare
 
-> Web scrap EWG to find out about ingredient ratings for skincare products
+> Web scrap [EWG](https://www.ewg.org/skindeep/) to find out about ingredient safety and hazard ratings for various skincare products and toiletries.
 
 ## Getting started
 
