@@ -80,6 +80,8 @@ function sanitize(input) {
     // Replace ingredient names
     .replace(/ceramide\snp/g, 'ceramide ')
     .replace(/galactomyces/g, 'saccharomyces')
+    .replace(/sh\-oligopeptide-\d*/g, 'oligopeptide')
+    .replace(/sh\-polypeptide-\d*/g, 'polypeptide')
 
     // Remove generic types of ingredients
     .replace(/leaf/g, '')
@@ -98,10 +100,11 @@ function sanitize(input) {
     .replace(/stem/g, '')
 
     // Deal with spaces, brakcets and commas
-    .replace(/[w]*,[w]*/g, ', ')   // replace  "word,word" with "word, word"
+    .replace(/[a-zA-Z]+,[a-zA-Z]+/g, ', ')   // replace  "word,word" with "word, word"
     .replace(/\([a-zA-Z\s]+\)/g, '') // remove all bracketted words
     .replace(/\(\)/g, '')      // remove all brackets
-    .replace(/\//g, '')       // remove all forward slashes
+    .replace(/\s\//g, '')       // remove all forward slashes
+    .replace(/\/\s/g, '')       // remove all forward slashes
     .replace(/\./g, '')       // remove all full stops
     .replace(/\s\s*/g, ' ')   // remove double spaces
     .replace(/\s,\s/g, ', ')  // replace " , " with ", "
