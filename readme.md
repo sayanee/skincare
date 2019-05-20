@@ -6,11 +6,11 @@
 
 1. Install dependancies
 
-    ```
+    ```sh
     npm i
     ```
 1. Query EWG
 
-    ```
+    ```sh
     node ewg.js -n "{NAME OF PRODUCT}" -b "{BRAND OF PRODUCT}" -c "{TYPE OF PRODUCT}" -i "{COMMA SEPARATED INGREDIENT LIST}"
     ```

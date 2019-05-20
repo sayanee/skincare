@@ -41,17 +41,9 @@ ingredientListArray.forEach(function(ingredient) {
     }
 
     if (listing.ingredient) {
-      var ingredientName = listing.ingredient.substring(0, listing.ingredient.indexOf('('))
-      ingredientName = ingredientName.replace(/INGREDIENT:/g, '').trim()
-
-      var paragraph = listing.score
-      var regex = /image\d/g
-      var found = paragraph.match(regex)
-      var score = found[0].replace(/image/g, '')
-      score = parseInt(score, 10)
+      var score = getIngredientScore(listing.ingredient, listing.score)
 
       if (score > 2) {
-        // console.log(ingredient + ': ' + ingredientName + '(' + score + ') ❌')
         console.log(ingredient + ' (' + score + ')')
         ingredientListHarmful.push(listing.ingredient)
       }
@@ -59,15 +51,7 @@ ingredientListArray.forEach(function(ingredient) {
 
     count++;
     if (count == ingredientListArray.length ) {
-      console.log("---------------------------")
-      console.log('Total score: ' + Math.floor(((ingredientListArray.length - ingredientListNotFound.length - ingredientListHarmful.length) / ingredientListArray.length) * 100) + '%')
-      console.log('Total number of ingredients: ' + ingredientListArray.length)
-      console.log('Total number of ingredients harmful: ' + ingredientListHarmful.length)
-      console.log('Total number of ingredients not found in EWG DB: ' + ingredientListNotFound.length)
-      ingredientListNotFound.forEach(function(eachIngredient) {
-        console.log('\t' + eachIngredient)
-      })
-      console.log("---------------------------")
+      printResult()
     }
 
     setTimeout(function() { }, 1000)
@@ -110,4 +94,28 @@ function sanitize(input) {
     .replace(/\s,\s/g, ', ')  // replace " , " with ", "
     .replace(/\s,/g, ', ')    // replace " ," with ", "
     .replace(/,,\s/g, ', ')   // replace  ",," with ", "
+}
+
+function getIngredientScore(listIngredient, listScore) {
+  var ingredientName = listIngredient.substring(0, listIngredient.indexOf('('))
+  ingredientName = ingredientName.replace(/INGREDIENT:/g, '').trim()
+
+  var paragraph = listScore
+  var regex = /image\d/g
+  var found = paragraph.match(regex)
+  var score = found[0].replace(/image/g, '')
+
+  return parseInt(score, 10)
+}
+
+function printResult() {
+  console.log("---------------------------")
+  console.log('Total score: ' + Math.floor(((ingredientListArray.length - ingredientListNotFound.length - ingredientListHarmful.length) / ingredientListArray.length) * 100) + '%')
+  console.log('Total number of ingredients: ' + ingredientListArray.length)
+  console.log('Total number of ingredients harmful: ' + ingredientListHarmful.length)
+  console.log('Total number of ingredients not found in EWG DB: ' + ingredientListNotFound.length)
+  ingredientListNotFound.forEach(function(eachIngredient) {
+    console.log('\t' + eachIngredient)
+  })
+  console.log("---------------------------")
 }
